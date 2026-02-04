@@ -33,6 +33,8 @@ To build and run this project, you need a specific Solana/Rust toolchain configu
    cd slp-solana-agent/slp_validator
    ```
 
+   **⚠️ Important:** All commands below must be run from the `slp_validator` directory.
+
 2. **Install Dependencies**
 
    ```bash
