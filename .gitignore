@@ -1,0 +1,29 @@
+# Node
+node_modules/
+dist/
+build/
+
+# Rust / Anchor / Solana
+target/
+.anchor/
+.base/
+**/*.rs.bk
+test-ledger/
+
+# Local Toolchain (Manual Install)
+temp_solana/
+solana.tar.bz2
+platform-tools.tar.bz2
+criterion-v2.3.2-osx-x86_64.tar.bz2
+
+# Secrets & Keys
+.env
+.config/
+**/*.json
+!tsconfig.json
+!package.json
+!slp_validator/Anchor.toml
+!slp_validator/idl/
+
+# System
+.DS_Store
