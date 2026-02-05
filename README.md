@@ -14,6 +14,14 @@ This repository contains the reference implementation for the **SLP Validator**,
 - **Replay Protection**: Enforces monotonic counters to preventing proof reuse or tampering.
 - **Agentic Decision Making**: Smart contract logic that autonomously approves or blocks transactions based on hardware signal validity.
 
+### 🛡️ Security Paradigm: Proof of Physics vs. Proof of Personhood
+
+While standard Proof of Personhood (PoP) focuses on "Who" is behind a screen using biometrics, SLP focuses on "What" is happening in the physical world.
+
+**The Problem**: In DePIN, a single verified human can still use a server to spoof 10,000 "virtual" devices (Sybil Attack).
+
+**The SLP Solution**: We enforce **Proof of Physics (PoPhys)**. By anchoring our verification logic in a hardware TEE (Trusted Execution Environment), we ensure that a transaction is only valid if the laws of physics were obeyed. If there is no kinetic signal (vibration, GPS movement), there is no state-lock release.
+
 ## 🛠️ Prerequisites
 
 To build and run this project, you need a specific Solana/Rust toolchain configuration due to modern dependency requirements.
@@ -62,9 +70,9 @@ We use a comprehensive TypeScript simulation suite to verify the agent's behavio
    ```
    _This will register a fleet of 5 drones, simulating GPS and Vibration triggers, and attempt a replay attack to verify security defenses._
 
-## 🎬 Cinematic Demo ("Money Shot")
+## 🎬 Cinematic Demo: The Sybil-Resistance Stress Test
 
-For a visual demonstration of the Agent's decision-making process (Red vs. Green scenarios), run the standalone demo script:
+For a visual demonstration of the Agent's autonomous enforcement (Red vs. Green scenarios), run:
 
 ```bash
 npx ts-node tests/money_shot.ts
@@ -72,8 +80,8 @@ npx ts-node tests/money_shot.ts
 
 This simulates:
 
-1.  **🔴 A Sybil Attack**: An invalid proof is rejected/blocked.
-2.  **🟢 A Verified Event**: A valid Kinetic Proof unlocks the state and executes the payout.
+1.  **🔴 A Sybil Attack**: An invalid proof is rejected/blocked (Simulated Red State).
+2.  **🟢 A Verified Event**: A valid Kinetic Proof unlocks the state and executes the payout (Simulated Green State).
 
 ## 🏗️ Architecture
 
@@ -83,6 +91,16 @@ This simulates:
   - `hardware_id`: Unique string identifier.
   - `reputation_score`: On-chain trust score.
   - `last_counter`: Replay protection mechanism.
+
+## 🤖 Agentic Development Stack
+
+This protocol was built using a high-velocity, human-in-the-loop agentic workflow:
+
+- **Architect**: Human Strategy & Hardware Specs.
+- **Lead Engineer**: Gemini 3 Pro (Autonomous logic implementation & toolchain resolution).
+- **Environment**: AntiGravity IDE (Optimized for real-time AI-to-Compiler iteration).
+
+By leveraging Gemini 3 Pro within the AntiGravity environment, we were able to resolve complex Rust/C++ dependency conflicts (such as the platform-tools v1.43 bridge) and optimize our "Zero-Allocation" security patterns in a fraction of the standard development cycle.
 
 ## 📄 License
 
