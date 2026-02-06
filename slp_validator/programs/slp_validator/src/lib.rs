@@ -7,6 +7,12 @@ pub mod slp_validator {
     use super::*;
 
     pub fn register_device(ctx: Context<RegisterDevice>, hardware_id: String) -> Result<()> {
+        // Input validation: prevent excessively long hardware IDs
+        require!(
+            hardware_id.len() > 0 && hardware_id.len() <= 64,
+            ErrorCode::InvalidHardwareId
+        );
+        
         let device_state = &mut ctx.accounts.device_state;
         device_state.authority = ctx.accounts.authority.key();
         device_state.last_counter = 0;
@@ -22,13 +28,25 @@ pub mod slp_validator {
         trigger_type: u8, 
         _signature: String
     ) -> Result<()> {
+        // ⚠️ SECURITY WARNING: Signature verification is NOT implemented in this demo.
+        // In production, you MUST verify the TEE signature here to ensure the proof
+        // is authentic and signed by the hardware enclave.
+        // See SECURITY.md for implementation recommendations.
+        
         let device_state = &mut ctx.accounts.device_state;
 
         // Logic 1: Check if counter is fresh
         // Strict greater than check for replay protection
-        if monotonic_counter <= device_state.last_counter {
-            return err!(ErrorCode::StaleProof); 
-        }
+        require!(
+            monotonic_counter > device_state.last_counter,
+            ErrorCode::StaleProof
+        );
+        
+        // Logic 2: Prevent counter overflow
+        require!(
+            monotonic_counter < u64::MAX,
+            ErrorCode::CounterOverflow
+        );
 
         // Logic 2: Update state
         device_state.last_counter = monotonic_counter;
@@ -115,4 +133,8 @@ pub struct ProofVerified {
 pub enum ErrorCode {
     #[msg("The proof counter is stale (less than or equal to stored counter).")]
     StaleProof,
+    #[msg("Hardware ID must be between 1 and 64 characters.")]
+    InvalidHardwareId,
+    #[msg("Counter value is too large and would cause overflow.")]
+    CounterOverflow,
 }
