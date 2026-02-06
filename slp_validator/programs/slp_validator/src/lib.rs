@@ -9,7 +9,7 @@ pub mod slp_validator {
     pub fn register_device(ctx: Context<RegisterDevice>, hardware_id: String) -> Result<()> {
         // Input validation: prevent excessively long hardware IDs
         require!(
-            hardware_id.len() > 0 && hardware_id.len() <= 64,
+            !hardware_id.is_empty() && hardware_id.len() <= 64,
             ErrorCode::InvalidHardwareId
         );
         
