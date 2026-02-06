@@ -69,8 +69,8 @@ _"We didn't just write code; we deployed an autonomous immune system for Solana.
 
 ## 📚 Documentation
 
-- [**White Paper (19 Pages)**](docs/whitepaper.md): Full cryptographic specification and game-theoretic analysis.
-- [**Patent Filing**](docs/patent_summary.md): Summary of the "State-Locked" invention.
+- [**White Paper (19 Pages)**](docs/SLP_Whitepaper_v1.md): Full cryptographic specification and game-theoretic analysis.
+- [**Patent Filing**](docs/Patent_GB2602651.8_Summary.md): Summary of the "State-Locked" invention.
 
 ## 🧪 Testing the Protocol (Devnet)
 
