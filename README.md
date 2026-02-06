@@ -12,6 +12,28 @@
 
 ### 🔴 [LIVE ON DEVNET: Connect Phantom Wallet to Test](https://slp-mission-control.vercel.app)
 
+### 🎮 How to Test the Mission Control (Judge's Guide)
+
+**Prerequisite:** You need a Solana Wallet (Phantom or Backpack) set to **Devnet**.
+
+**Step 1: Configure Wallet for Devnet**
+1. Open your Phantom Wallet.
+2. Go to **Settings** (Gear Icon) -> **Developer Settings**.
+3. Toggle **"Testnet Mode"** to ON.
+4. Ensure you have **Devnet SOL**. (If 0, copy your address and claim free SOL at [faucet.solana.com](https://faucet.solana.com)).
+
+**Step 2: Connect to Dashboard**
+1. Go to the Live Dashboard link above.
+2. Click **"Connect Wallet"** (Top Right).
+   * *Mobile Users:* Turn phone to **Landscape Mode** if the button is hidden.
+3. Once connected, the status will show 🔴 **LOCKED**.
+
+**Step 3: Run the "TEE Proof" Simulation**
+1. Click the **"Broadcast Valid TEE Proof"** button.
+2. **Approve** the transaction in your wallet.
+3. Watch the status update to 🟢 **UNLOCKED (Access Granted)**.
+4. Check the Console Log on the screen for the Transaction Signature.
+
 ---
 
 ### 📺 [WATCH THE DEMO: The "Cyborg" Stress Test](https://www.youtube.com/watch?v=u8FER7IhBTY)
