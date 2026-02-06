@@ -10,6 +10,10 @@
 
 ---
 
+### 🔴 [LIVE ON DEVNET: Connect Phantom Wallet to Test](https://slp-mission-control.vercel.app)
+
+---
+
 ### 📺 [WATCH THE DEMO: The "Cyborg" Stress Test](https://www.youtube.com/watch?v=u8FER7IhBTY)
 
 ---
