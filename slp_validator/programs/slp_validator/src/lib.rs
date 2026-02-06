@@ -29,6 +29,8 @@ pub mod slp_validator {
         signature: String
     ) -> Result<()> {
         // Signature validation: ensure signature is not empty
+        // NOTE: This is a basic check for MVP demonstration purposes.
+        // Production requires full Ed25519 cryptographic verification (see TODO below).
         require!(
             signature.len() > 0,
             ErrorCode::InvalidSignature

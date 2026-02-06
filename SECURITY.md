@@ -41,11 +41,11 @@ This repository represents a **functional prototype** demonstrating the SLP arch
 ### Production Requirements
 For mainnet deployment, the following must be implemented:
 
-1. ✅ **Full Ed25519 Signature Verification** using Solana's native verification
-2. ✅ **TEE Public Key Registry** for device attestation
-3. ✅ **Rate Limiting** to prevent spam attacks
-4. ✅ **Comprehensive Testing** with real TEE hardware
-5. ✅ **Security Audit** by professional auditors
+1. 🔲 **Full Ed25519 Signature Verification** using Solana's native verification
+2. 🔲 **TEE Public Key Registry** for device attestation
+3. 🔲 **Rate Limiting** to prevent spam attacks
+4. 🔲 **Comprehensive Testing** with real TEE hardware
+5. 🔲 **Security Audit** by professional auditors
 
 ---
 
