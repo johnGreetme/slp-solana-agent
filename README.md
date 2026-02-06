@@ -74,9 +74,42 @@ graph TD
 
 ### The Stack
 
-- **Hardware Layer (C++):** Low-level interaction with Android hardware interfaces and TEE keystores.
-- **Blockchain Layer (Rust):** Custom Anchor program implementing the `StateLock` account primitive.
-- **Bridge Layer (TypeScript):** SDK for DePIN developers to integrate SLP into their existing apps.
+| Layer | Technology | Repository |
+|-------|-----------|------------|
+| **Hardware (C++)** | ARM TrustZone / Android Keystore | [🔗 greetme-slp-sdk](https://github.com/johnGreetme/greetme-slp-sdk) |
+| **Blockchain (Rust)** | Anchor Program on Solana Devnet | This Repo (`slp_validator/`) |
+| **Bridge (TypeScript)** | SDK for DePIN developers | This Repo (`web/`) |
+
+---
+
+## 📂 Project Structure (For Judges)
+
+> **📍 You Are Here:** This is the "Control Plane" repository.
+> The companion **Hardware SDK** is linked below.
+
+```
+slp-solana-agent/                   # 👈 YOU ARE HERE
+├── slp_validator/                  # Anchor Program (Rust)
+│   ├── programs/slp_validator/src/lib.rs   # ⭐ Core State-Lock Logic
+│   └── tests/                      # On-chain test suite
+├── web/                            # Mission Control Dashboard (Next.js)
+│   └── lib/program.ts              # Frontend ↔ Solana bridge
+├── docs/                           # Whitepaper & Patent
+├── SECURITY.md                     # Threat Model & Audit Notes
+└── README.md                       # 👈 YOU ARE READING THIS
+
+greetme-slp-sdk/                    # 👈 COMPANION REPO (Click Link Below)
+├── src/                            # C++ TEE implementation
+│   ├── slp_manager.cpp             # ⭐ Hardware Signing Logic
+│   └── tee_stub.cpp                # TrustZone simulation layer
+├── include/slp_core.h              # Public API header
+└── tests/                          # Hardware simulation tests
+```
+
+### 🔗 [**VIEW THE HARDWARE SDK →**](https://github.com/johnGreetme/greetme-slp-sdk)
+
+> The SDK contains the **C++ code** that runs inside the Trusted Execution Environment (TEE).
+> It handles hardware key generation, sensor signing, and the "Kinetic Proof" primitive.
 
 ### 🤖 The "Agentic" Workflow (Colosseum Track)
 
