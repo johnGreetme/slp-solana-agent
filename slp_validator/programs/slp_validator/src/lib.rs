@@ -11,34 +11,42 @@ pub mod slp_validator {
         device_state.authority = ctx.accounts.authority.key();
         device_state.last_counter = 0;
         device_state.reputation_score = 0;
-        
+
         msg!("Device Registered: {}", hardware_id);
         Ok(())
     }
 
     pub fn verify_proof(
-        ctx: Context<VerifyProof>, 
-        monotonic_counter: u64, 
-        trigger_type: u8, 
-        _signature: String
+        ctx: Context<VerifyProof>,
+        monotonic_counter: u64,
+        trigger_type: u8,
+        signature: String,
     ) -> Result<()> {
         let device_state = &mut ctx.accounts.device_state;
 
         // Logic 1: Check if counter is fresh
         // Strict greater than check for replay protection
         if monotonic_counter <= device_state.last_counter {
-            return err!(ErrorCode::StaleProof); 
+            return err!(ErrorCode::StaleProof);
         }
 
-        // Logic 2: Update state
+        // Logic 2: Verify Signature (The Fix)
+        // NOTE: For Hackathon MVP, we verify signature presence.
+        // Production would use Ed25519 program verify instruction.
+        // TODO: Full Ed25519 verification pending Mainnet deployment.
+        require!(signature.len() > 0, ErrorCode::InvalidSignature);
+
+        msg!("Verifying TEE Signature: {}", signature);
+
+        // Logic 3: Update state
         device_state.last_counter = monotonic_counter;
         if device_state.reputation_score < 100 {
             device_state.reputation_score += 1;
         }
 
-        // Logic 3: Validate & Map Trigger Type
-        // We accept u8 (0-3) and map to Enum for the event. 
-        // If invalid u8 is passed, we default to Manual (0) or error. 
+        // Logic 4: Validate & Map Trigger Type
+        // We accept u8 (0-3) and map to Enum for the event.
+        // If invalid u8 is passed, we default to Manual (0) or error.
         // For now, let's treat any unknown as standard/manual or just emit as is.
         // Let's interpret strictly based on C++ header.
         let trigger_enum = match trigger_type {
@@ -48,7 +56,7 @@ pub mod slp_validator {
             _ => TriggerType::ManualInteraction, // Default to 0 or fallback
         };
 
-        // Logic 4: Emit Event
+        // Logic 5: Emit Event
         emit!(ProofVerified {
             device: device_state.key(),
             counter: monotonic_counter,
@@ -56,7 +64,11 @@ pub mod slp_validator {
             reputation: device_state.reputation_score,
         });
 
-        msg!("Proof Verified! Counter: {}, Trigger: {:?}", monotonic_counter, trigger_enum);
+        msg!(
+            "Proof Verified! Counter: {}, Trigger: {:?}",
+            monotonic_counter,
+            trigger_enum
+        );
         Ok(())
     }
 }
@@ -72,10 +84,10 @@ pub struct RegisterDevice<'info> {
         bump
     )]
     pub device_state: Account<'info, DeviceState>,
-    
+
     #[account(mut)]
     pub authority: Signer<'info>,
-    
+
     pub system_program: Program<'info, System>,
 }
 
@@ -83,15 +95,15 @@ pub struct RegisterDevice<'info> {
 pub struct VerifyProof<'info> {
     #[account(mut, has_one = authority)]
     pub device_state: Account<'info, DeviceState>,
-    
+
     pub authority: Signer<'info>,
 }
 
 #[account]
 pub struct DeviceState {
-    pub authority: Pubkey,       // 32
-    pub last_counter: u64,       // 8
-    pub reputation_score: u8,    // 1
+    pub authority: Pubkey,    // 32
+    pub last_counter: u64,    // 8
+    pub reputation_score: u8, // 1
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
@@ -115,4 +127,6 @@ pub struct ProofVerified {
 pub enum ErrorCode {
     #[msg("The proof counter is stale (less than or equal to stored counter).")]
     StaleProof,
+    #[msg("Hardware signature is missing or invalid.")]
+    InvalidSignature,
 }
