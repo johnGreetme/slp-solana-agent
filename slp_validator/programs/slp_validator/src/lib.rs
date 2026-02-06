@@ -41,12 +41,6 @@ pub mod slp_validator {
             monotonic_counter > device_state.last_counter,
             ErrorCode::StaleProof
         );
-        
-        // Logic 2: Prevent counter overflow
-        require!(
-            monotonic_counter < u64::MAX,
-            ErrorCode::CounterOverflow
-        );
 
         // Logic 2: Update state
         device_state.last_counter = monotonic_counter;
@@ -135,6 +129,4 @@ pub enum ErrorCode {
     StaleProof,
     #[msg("Hardware ID must be between 1 and 64 characters.")]
     InvalidHardwareId,
-    #[msg("Counter value is too large and would cause overflow.")]
-    CounterOverflow,
 }

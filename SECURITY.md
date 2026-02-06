@@ -105,12 +105,12 @@ pub fn verify_proof(
 2. **Authority Validation:** Only device owner can submit proofs via `has_one = authority` constraint
 3. **Integer Overflow Protection:** Reputation score capped at 100
 4. **PDA Derivation:** Secure device state derivation using hardware_id seeds
+5. **Hardware ID Validation:** Length validated (1-64 characters) to prevent DoS attacks
 
 #### ⚠️ Known Limitations
 1. **No Signature Verification:** As described above - critical vulnerability
 2. **No Rate Limiting:** No on-chain mechanism to prevent spam transactions
-3. **Unbounded Storage:** `hardware_id` string has no length validation, could be exploited for rent exhaustion
-4. **No Upgrade Authority:** Program cannot be updated (for both security and risk)
+3. **No Upgrade Authority:** Program cannot be updated (for both security and risk)
 
 ### Web Application Security
 
