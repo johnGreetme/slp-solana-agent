@@ -97,6 +97,15 @@ _"We didn't just write code; we deployed an autonomous immune system for Solana.
 
 - [**White Paper (19 Pages)**](docs/SLP_Whitepaper_v1.md): Full cryptographic specification and game-theoretic analysis.
 - [**Patent Filing**](docs/Patent_GB2602651.8_Summary.md): Summary of the "State-Locked" invention.
+- [**Security Policy**](SECURITY.md): Security audit report, known vulnerabilities, and production recommendations.
+
+## ⚠️ Security Notice
+
+**This is a DEMO/PROTOTYPE for the Colosseum Agent Hackathon.**
+
+⚠️ **CRITICAL:** This codebase demonstrates the conceptual architecture but **lacks complete security implementation**. Specifically, the TEE signature verification is not implemented in the smart contract. See [SECURITY.md](SECURITY.md) for full details.
+
+**DO NOT USE IN PRODUCTION** without implementing the missing security features documented in SECURITY.md.
 
 ## 🧪 Testing the Protocol (Devnet)
 
