@@ -10,6 +10,14 @@
 
 ---
 
+## 👁️ The Vision
+
+**We are building the Silicon Root of Trust for Solana.** In a world where software can lie, hardware tells the truth. SLP-Zero turns physical work into cryptographic certainty—ending the Sybil era and unlocking the $3.5T DePIN economy.
+
+### 📜 [**READ THE FOUNDER'S MANIFESTO →**](MANIFESTO.md)
+
+---
+
 ### 🔴 [LIVE ON DEVNET: Connect Phantom Wallet to Test](https://slp-mission-control.vercel.app)
 
 ### 🎮 How to Test the Mission Control (Judge's Guide)
