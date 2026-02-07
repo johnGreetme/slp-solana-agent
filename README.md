@@ -130,6 +130,8 @@ _"We didn't just write code; we deployed an autonomous immune system for Solana.
 
 - [**White Paper (19 Pages)**](docs/SLP_Whitepaper_v1.md): Full cryptographic specification and game-theoretic analysis.
 - [**Patent Filing**](docs/Patent_GB2602651.8_Summary.md): Summary of the "State-Locked" invention.
+- [**Production Roadmap**](ROADMAP.md): Native Ed25519 verification architecture for Mainnet.
+- [**Security Policy**](SECURITY.md): Threat model and production security checklist.
 
 ## 🧪 Testing the Protocol (Devnet)
 
