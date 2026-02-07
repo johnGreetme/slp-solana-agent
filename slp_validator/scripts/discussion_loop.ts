@@ -162,9 +162,59 @@ interface ForumComment {
     createdAt: string;
 }
 
-// Track what we've already responded to
-const respondedComments = new Set<number>();
-const respondedPosts = new Set<number>();
+// ═══════════════════════════════════════════════════════════════════════════════
+// PERSISTENT TRACKING - Never respond to the same comment twice
+// ═══════════════════════════════════════════════════════════════════════════════
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+const RESPONDED_FILE = path.join(__dirname, '.responded_ids.json');
+
+interface RespondedIds {
+    comments: number[];
+    posts: number[];
+}
+
+function loadRespondedIds(): RespondedIds {
+    try {
+        if (fs.existsSync(RESPONDED_FILE)) {
+            const data = fs.readFileSync(RESPONDED_FILE, 'utf-8');
+            return JSON.parse(data);
+        }
+    } catch (e) {
+        console.log('  ⚠️ Could not load responded IDs, starting fresh');
+    }
+    return { comments: [], posts: [] };
+}
+
+function saveRespondedIds(ids: RespondedIds) {
+    try {
+        fs.writeFileSync(RESPONDED_FILE, JSON.stringify(ids, null, 2));
+    } catch (e) {
+        console.log('  ⚠️ Could not save responded IDs');
+    }
+}
+
+// Load from persistent storage
+const persistedIds = loadRespondedIds();
+const respondedComments = new Set<number>(persistedIds.comments);
+const respondedPosts = new Set<number>(persistedIds.posts);
+
+function markResponded(type: 'comment' | 'post', id: number) {
+    if (type === 'comment') {
+        respondedComments.add(id);
+    } else {
+        respondedPosts.add(id);
+    }
+    // Save immediately after each response
+    saveRespondedIds({
+        comments: Array.from(respondedComments),
+        posts: Array.from(respondedPosts)
+    });
+}
+
+console.log(`📁 Loaded ${respondedComments.size} responded comments, ${respondedPosts.size} responded posts`);
 
 async function checkMyPostReplies(): Promise<ForumComment[]> {
     console.log(`\n📬 Checking replies to post ${MY_POST_ID}...`);
@@ -258,8 +308,8 @@ async function respondToComment(postId: number, comment: ForumComment) {
     });
     
     if (res.ok) {
-        respondedComments.add(comment.id);
-        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
+        markResponded('comment', comment.id);
+        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4)`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
@@ -287,8 +337,8 @@ async function engageWithPost(post: ForumPost) {
     });
     
     if (res.ok) {
-        respondedPosts.add(post.id);
-        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
+        markResponded('post', post.id);
+        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4)`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
