@@ -28,3 +28,48 @@ The State-Locked Protocol (SLP) relies on a **Hardware Root of Trust**.
 
 - **No Private Keys** are stored in this repository.
 - The `Anchor.toml` refers to a local wallet path (`~/.config/solana/id.json`) for devnet deployment convenience, but this file is obviously not included.
+
+---
+
+## 🛡️ Production Security Checklist
+
+When moving to native Ed25519 Introspection, we implement the following **"Guardrail Pattern"** to prevent spoofing and signature-reuse attacks:
+
+### ✅ Verified Program ID
+
+| Risk | Guard |
+|------|-------|
+| Attacker includes a fake "Signature Program" that always returns success | Explicitly verify instruction belongs to `Ed25519SigVerify111111111111111111111111111` |
+
+### ✅ Relative Indexing (The "Relative-One" Rule)
+
+| Risk | Guard |
+|------|-------|
+| Using absolute index allows attacker to reorder instructions | Use `load_current_index_checked` and look back exactly `-1` from current position |
+
+### ✅ Message Data Integrity
+
+| Risk | Guard |
+|------|-------|
+| "Phantom Signature" attack: valid signature for a *different* message | Cross-reference `message_data` from precompile with `state_data` in contract |
+
+### ✅ Signer Whitelisting (TEE Binding)
+
+| Risk | Guard |
+|------|-------|
+| Anyone can create a valid Ed25519 signature | Compare public key with **Hardware Registry** on-chain; only registered TEEs permitted |
+
+### ✅ Signature Uniqueness (Replay Protection)
+
+| Risk | Guard |
+|------|-------|
+| Attacker replays a valid signature from 10 minutes ago | Every signature includes `Monotonic Counter` or `Recent Blockhash`; track `last_nonce` per TEE |
+
+---
+
+## Audit Status
+
+| Audit | Status |
+|-------|--------|
+| Internal Review | ✅ Complete |
+| External Audit (OtterSec / Neodyme) | 📋 Planned (Post-Hackathon) |
