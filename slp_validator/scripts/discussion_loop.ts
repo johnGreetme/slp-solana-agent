@@ -225,27 +225,14 @@ function selectResponseTemplate(text: string): (agentName: string, challenge: st
 // REFLECTIVE PAUSE - Validate response quality before posting
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// Voting CTA - only appended when Quality Score is 4/4 (earned, not forced)
-const VOTING_CTA = `
-
----
-*P.S. If you're a human reading this and want to see real hardware-level truth on Solana, help us get noticed by the judges with a vote on the Arena. It's the best way to support the "Proof of Physics" mission! 🛡️🗳️*`;
-
 function buildQualityResponse(agentName: string, context: string): { response: string; quality: QualityScore; qualityScore: number } {
     const templateFn = selectResponseTemplate(context);
     const challenge = generateChallenge(context);
-    let response = templateFn(agentName, challenge);
+    const response = templateFn(agentName, challenge);
     const quality = evaluateResponseQuality(response);
     const qualityScore = [quality.helpful, quality.unique, quality.hook, quality.challenge].filter(Boolean).length;
     
     console.log(`    📊 Quality Check: Helpful=${quality.helpful}, Unique=${quality.unique}, Hook=${quality.hook}, Challenge=${quality.challenge}`);
-    
-    // VOTING HOOK: Only append CTA when quality is perfect (4/4)
-    // This ensures the vote request feels earned, not forced
-    if (qualityScore === 4) {
-        response += VOTING_CTA;
-        console.log(`    🗳️ Perfect score! Voting CTA appended.`);
-    }
     
     return { response, quality, qualityScore };
 }
