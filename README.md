@@ -87,7 +87,7 @@ graph TD
 > **📍 You Are Here:** This is the "Control Plane" repository.
 > The companion **Hardware SDK** is linked below.
 
-```
+```text
 slp-solana-agent/                   # 👈 YOU ARE HERE
 ├── slp_validator/                  # Anchor Program (Rust)
 │   ├── programs/slp_validator/src/lib.rs   # ⭐ Core State-Lock Logic
@@ -95,7 +95,8 @@ slp-solana-agent/                   # 👈 YOU ARE HERE
 ├── web/                            # Mission Control Dashboard (Next.js)
 │   └── lib/program.ts              # Frontend ↔ Solana bridge
 ├── docs/                           # Whitepaper & Patent
-├── SECURITY.md                     # Threat Model & Audit Notes
+├── ROADMAP.md                      # ⭐ Production Ed25519 Architecture
+├── SECURITY.md                     # Threat Model & Security Checklist
 └── README.md                       # 👈 YOU ARE READING THIS
 
 greetme-slp-sdk/                    # 👈 COMPANION REPO (Click Link Below)
