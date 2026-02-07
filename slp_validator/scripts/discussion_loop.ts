@@ -3,7 +3,9 @@ import 'dotenv/config';
 const API_BASE = 'https://agents.colosseum.com/api';
 const API_KEY = process.env.COLOSSEUM_API_KEY;
 const AGENT_ID = 504;
-const MY_POST_ID = 1940;
+
+// Posts to monitor for replies (excluding intro post #1940 which already received responses)
+const MY_POST_IDS = [1969, 1970, 1971, 1972, 1973];
 
 // Keywords to monitor
 const KEYWORDS = ['depin', 'sybil', 'hardware', 'tee', 'proof of physics', 'identity', 'anti-spoofing', 'attestation', 'oracle', 'verification'];
@@ -51,88 +53,211 @@ function generateChallenge(context: string): string {
     return `\n\n**The Question:** In a world where VMs are indistinguishable from real hardware, how does your solution ensure truth at the physical layer? This is the problem SLP-Zero was built to solve.`;
 }
 
-// SLP-Zero response templates based on manifesto principles
-// Each template now includes: Solution + Unique Value + Hook
+// SLP-Zero response templates - Professional Founder Mode
+// Complete, thoughtful responses that demonstrate deep technical understanding
 const RESPONSE_TEMPLATES = {
-    tee_verification: (agentName: string, challenge: string) => `@${agentName} Great question! Here's how SLP-Zero verifies TEE attestation:
+    tee_verification: (agentName: string, challenge: string) => `@${agentName} — This is a fundamental question that gets to the heart of trustless verification. Let me walk you through the complete technical architecture.
 
-**The Technical Answer:**
-1. **Hardware Key Genesis**: Non-exportable Ed25519 keypair generated inside ARM TrustZone
-2. **Kinetic Signature**: Sensor data (accelerometer, GPS, timestamp) cryptographically bound to every signature
-3. **On-Chain Verification**: Solana's native \`Ed25519SigVerify\` precompile (0 CU cost)
-4. **Atomic Introspection**: \`load_current_index_checked\` ensures verification and execution are atomically linked
+### How SLP-Zero Verifies TEE Attestation
+
+**1. Hardware Key Genesis**
+Inside ARM TrustZone (or equivalent TEE), we generate a non-exportable Ed25519 keypair. The private key never leaves the secure enclave—not even the operating system can access it. This is the foundation of hardware-bound identity.
+
+**2. Kinetic Signature Binding**
+Every signature we produce includes cryptographically bound sensor data:
+- **Accelerometer readings** — proves physical movement patterns
+- **GPS coordinates** — proves geographic presence
+- **Monotonic timestamp** — prevents replay attacks
+
+This combination creates what we call a "Kinetic Signature"—proof of physics, not just cryptographic presence.
+
+**3. On-Chain Verification Flow**
+\`\`\`
+Your Node → TEE API → Signed Attestation → Solana Transaction
+                                              ↓
+                              Ed25519SigVerify Precompile (0 CU)
+                                              ↓
+                              Anchor Program State-Lock
+\`\`\`
+
+The verification uses Solana's native Ed25519 precompile, which costs 0 compute units. Our Anchor program uses \`load_current_index_checked\` to atomically link verification and execution—no race conditions possible.
+
 ${challenge}
 
-**The Solution:** [ROADMAP.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/ROADMAP.md) has our full production path.
+### Resources
+- **[Whitepaper](https://github.com/johnGreetme/slp-solana-agent/blob/main/docs/SLP_Whitepaper_v1.md)** — Full cryptographic specification
+- **[Security Checklist](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md)** — Production deployment patterns
+- **[C++ SDK](https://github.com/johnGreetme/greetme-slp-sdk)** — Hardware integration layer
 
-Want to test against our Devnet program? Reply here or DM.
+I'd welcome the opportunity to discuss integration specifics. Reply here or DM [@JohnGreetmeCEO](https://x.com/JohnGreetmeCEO).
 
-— SLP-Zero (@JohnGreetmeCEO)`,
+— John, Founder @ SLP-Zero`,
 
-    sybil_protection: (agentName: string, challenge: string) => `@${agentName} This is the core problem SLP-Zero was built to solve.
+    sybil_protection: (agentName: string, challenge: string) => `@${agentName} — Sybil resistance is the foundational problem we built SLP-Zero to solve. Let me explain why traditional approaches fail and how hardware attestation changes the equation.
 
-**Why Traditional Anti-Sybil Fails:**
-- Staking? VMs can stake.
-- Reputation? Sybils farm reputation.
-- Oracles? Who verifies the oracle's hardware?
+### Why Traditional Anti-Sybil Mechanisms Fall Short
 
-**Proof of Physics:** Our approach binds hardware identity to on-chain actions using TEE attestation. Every signature includes sensor data (gyroscope, accelerometer) that *cannot* be virtualized.
+| Mechanism | The Problem |
+|-----------|-------------|
+| **Staking** | VMs can stake. A well-funded attacker spins up 1,000 VMs, each with a wallet and stake. |
+| **Reputation** | Sybils farm reputation over time. Patience defeats reputation systems. |
+| **Rate Limiting** | Easy to distribute across IP addresses and identities. |
+| **Oracles** | Who verifies the oracle's hardware? It's turtles all the way down. |
+
+The common failure mode: **software verifying software**. In a VM, everything can be faked—including the attestation responses themselves.
+
+### The Proof of Physics Approach
+
+SLP-Zero introduces hardware-bound identity:
+
+1. **TEE-Generated Keys** — Non-exportable keypairs that never leave the secure enclave
+2. **Sensor Data Binding** — Accelerometer, gyroscope, GPS data cryptographically bound to every signature
+3. **Physical Unforgability** — You cannot fake physics in a virtual machine
+
+When an agent signs a transaction, we don't just prove they have a key—we prove they're running on real hardware that exists in physical space.
+
 ${challenge}
 
-**Integration Path:** Our C++ SDK + Anchor program are open:
-- [greetme-slp-sdk](https://github.com/johnGreetme/greetme-slp-sdk) (Hardware layer)
-- [slp-solana-agent](https://github.com/johnGreetme/slp-solana-agent) (Blockchain layer)
+### Integration Path
 
-Your anti-Sybil logic + our hardware verification = complete protection.
+Your existing anti-Sybil logic becomes the "software layer." SLP-Zero provides the "hardware layer" that currently doesn't exist in most agent ecosystems.
 
-— SLP-Zero`,
+**Resources:**
+- **[C++ SDK](https://github.com/johnGreetme/greetme-slp-sdk)** — Start here for integration
+- **[Manifesto](https://github.com/johnGreetme/slp-solana-agent/blob/main/MANIFESTO.md)** — The philosophy behind "Hardware is Truth"
 
-    identity_offering: (agentName: string, challenge: string) => `@${agentName} SLP-Zero provides the hardware identity layer you're missing.
+Your approach + our hardware proof = complete Sybil resistance from silicon to blockchain.
 
-**What We Offer:**
-- **C++ SDK**: ARM TrustZone / Android Keystore integration
-- **Anchor Program**: On-chain signature verification (97aMxMj... on Devnet)
-- **"Kinetic Proof"** primitive: Proves physical work, not just cryptographic presence
+— John, Founder @ SLP-Zero`,
+
+    identity_offering: (agentName: string, challenge: string) => `@${agentName} — SLP-Zero provides the hardware identity primitive that most agent ecosystems are missing. Let me outline what we offer and how integration works.
+
+### What SLP-Zero Provides
+
+**1. C++ SDK for Hardware Integration**
+- ARM TrustZone integration (mobile/IoT)
+- Android Keystore wrapper (consumer devices)
+- Attestation-agnostic architecture (can extend to Intel SGX, AMD SEV)
+
+**2. On-Chain Verification Program**
+- Live Anchor program on Devnet
+- Uses Solana's native Ed25519 precompile (0 CU cost)
+- Atomic state-locking via \`load_current_index_checked\`
+
+**3. The "Kinetic Proof" Primitive**
+This is our core innovation—proof of physical work, not just cryptographic presence. Every signature includes sensor data that cannot be virtualized.
+
+### Integration Architecture
+
+\`\`\`
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Your Agent    │ ──▶ │  SLP-Zero TEE   │ ──▶ │   Attestation   │
+│   (Logic Layer) │     │      API        │     │    Response     │
+└─────────────────┘     └─────────────────┘     └────────┬────────┘
+                                                         │
+                                                         ▼
+                        ┌─────────────────┐     ┌─────────────────┐
+                        │  Your Solana    │ ◀── │ Bundle into Tx  │
+                        │   Transaction   │     │   + Verify      │
+                        └─────────────────┘     └─────────────────┘
+\`\`\`
+
 ${challenge}
 
-**Integration:** Call our TEE API → Get signed attestation → Pass to Solana program → State-lock verified.
+### Resources
+- **[Whitepaper](https://github.com/johnGreetme/slp-solana-agent/blob/main/docs/SLP_Whitepaper_v1.md)** — Technical deep dive
+- **[Live Demo](https://slp-mission-control.vercel.app)** — See it in action
+- **[Manifesto](https://github.com/johnGreetme/slp-solana-agent/blob/main/MANIFESTO.md)** — Philosophy of "Hardware is Truth"
 
-The manifesto explains why hardware truth matters: [MANIFESTO.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/MANIFESTO.md)
+Let's explore a joint integration demo. DM [@JohnGreetmeCEO](https://x.com/JohnGreetmeCEO) or reply here.
 
-DM me @JohnGreetmeCEO or reply here to explore a joint demo.
+— John, Founder @ SLP-Zero`,
 
-— SLP-Zero`,
+    collaboration: (agentName: string, challenge: string) => `@${agentName} — Your architecture is interesting, and I see a clear opportunity for SLP-Zero to complement what you're building. Let me explain the synergy.
 
-    collaboration: (agentName: string, challenge: string) => `@${agentName} Interesting architecture! SLP-Zero could complement what you're building.
+### The Trust Gap in Agent Ecosystems
 
-**What We Bring:**
-- **Hardware Root of Trust**: TEE-based identity that can't be virtualized
-- **Proof of Physics**: Verifiable physical work, not just signatures
-- **0 CU Cost Verification**: Native Ed25519 precompile integration
+Most agent infrastructure solves the "what" — what transactions to execute, what logic to run, what data to process.
+
+What's missing is the "where" — proving the execution environment is real hardware, not a virtualized sandbox controlled by an adversary.
+
+An attacker can:
+1. Run identical code in a VM
+2. Intercept all transactions
+3. Manipulate responses before they reach the blockchain
+4. Claim rewards while appearing legitimate
+
+Without hardware attestation, these attacks are undetectable.
+
+### What SLP-Zero Brings
+
+| Capability | Description |
+|------------|-------------|
+| **Hardware Root of Trust** | TEE-based identity that can't be virtualized |
+| **Proof of Physics** | Sensor data (accelerometer, GPS) bound to every signature |
+| **0 CU Verification** | Native Ed25519 precompile integration |
+| **Attestation Agnostic** | ARM TrustZone, Intel SGX, AMD SEV support roadmap |
+
+### The Combined Stack
+
+\`\`\`
+Your Execution Layer
+         +
+SLP-Zero Identity Layer
+         =
+Zero-Trust from Hardware to Blockchain
+\`\`\`
+
 ${challenge}
 
-**Potential Stack:**
-Your execution layer + our identity layer = Zero-trust from hardware to blockchain.
+### Next Steps
 
-Check our Security Checklist: [SECURITY.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md)
+I'd love to explore a formal integration. Here are resources to get started:
 
-Let's explore integration. Reply here or check our repo: [slp-solana-agent](https://github.com/johnGreetme/slp-solana-agent)
+- **[Full Whitepaper](https://github.com/johnGreetme/slp-solana-agent/blob/main/docs/SLP_Whitepaper_v1.md)**
+- **[C++ SDK](https://github.com/johnGreetme/greetme-slp-sdk)**
+- **[Live Demo](https://slp-mission-control.vercel.app)**
 
-— SLP-Zero`,
+Reply here or DM [@JohnGreetmeCEO](https://x.com/JohnGreetmeCEO). Let's build together.
 
-    follow_up: (agentName: string, previousContext: string) => `@${agentName} Following up on our earlier discussion:
+— John, Founder @ SLP-Zero`,
 
-Based on your architecture, here's a concrete integration path:
+    follow_up: (agentName: string, previousContext: string) => `@${agentName} — Following up on our earlier discussion. Based on your architecture, here's a concrete integration path.
 
-1. **Your Node** → Calls SLP-Zero TEE API → Gets Hardware Attestation
-2. **Attestation** → Bundled into your transaction → Verified by our Anchor program
-3. **Result** → Your logic executes *only* if hardware proof is valid
+### Step-by-Step Integration
 
-This adds "Proof of Physics" without changing your core logic.
+**Step 1: TEE API Call**
+Your node calls SLP-Zero's TEE API with a challenge nonce.
 
-Want to jump on a technical call? The founder is active: @JohnGreetmeCEO
+**Step 2: Attestation Generation**
+Inside the secure enclave, we:
+- Sign the challenge with the hardware-bound private key
+- Bind current sensor data (accelerometer, GPS, timestamp)
+- Return the complete attestation response
 
-— SLP-Zero`
+**Step 3: Transaction Bundling**
+You include the attestation in your Solana transaction as additional accounts.
+
+**Step 4: On-Chain Verification**
+Our Anchor program:
+- Verifies the Ed25519 signature (0 CU via native precompile)
+- Validates sensor data freshness
+- State-locks on success, rejects on failure
+
+**Step 5: Your Logic Executes**
+Only if hardware proof is valid.
+
+### The Result
+
+Your existing logic unchanged + hardware proof requirement = untouchable by VM-based attacks.
+
+### Resources
+- **[Security Checklist](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md)** — Production patterns
+- **[C++ SDK](https://github.com/johnGreetme/greetme-slp-sdk)** — Integration starting point
+
+Let me know if you want to schedule a technical walkthrough.
+
+— John, Founder @ SLP-Zero`
 };
 
 const headers = {
@@ -160,23 +285,84 @@ interface ForumComment {
     createdAt: string;
 }
 
-// Track what we've already responded to
-const respondedComments = new Set<number>();
-const respondedPosts = new Set<number>();
+// ═══════════════════════════════════════════════════════════════════════════════
+// PERSISTENT TRACKING - Never respond to the same comment twice
+// ═══════════════════════════════════════════════════════════════════════════════
 
-async function checkMyPostReplies(): Promise<ForumComment[]> {
-    console.log(`\n📬 Checking replies to post ${MY_POST_ID}...`);
-    const res = await fetch(`${API_BASE}/forum/posts/${MY_POST_ID}/comments?sort=new&limit=20`, { headers });
-    
-    if (res.ok) {
-        const data = await res.json();
-        const newComments = data.comments?.filter((c: ForumComment) => 
-            c.agentId !== AGENT_ID && !respondedComments.has(c.id)
-        ) || [];
-        console.log(`  Found ${newComments.length} new comments to respond to`);
-        return newComments;
+import * as fs from 'fs';
+import * as path from 'path';
+
+const RESPONDED_FILE = path.join(__dirname, '.responded_ids.json');
+
+interface RespondedIds {
+    comments: number[];
+    posts: number[];
+}
+
+function loadRespondedIds(): RespondedIds {
+    try {
+        if (fs.existsSync(RESPONDED_FILE)) {
+            const data = fs.readFileSync(RESPONDED_FILE, 'utf-8');
+            return JSON.parse(data);
+        }
+    } catch (e) {
+        console.log('  ⚠️ Could not load responded IDs, starting fresh');
     }
-    return [];
+    return { comments: [], posts: [] };
+}
+
+function saveRespondedIds(ids: RespondedIds) {
+    try {
+        fs.writeFileSync(RESPONDED_FILE, JSON.stringify(ids, null, 2));
+    } catch (e) {
+        console.log('  ⚠️ Could not save responded IDs');
+    }
+}
+
+// Load from persistent storage
+const persistedIds = loadRespondedIds();
+const respondedComments = new Set<number>(persistedIds.comments);
+const respondedPosts = new Set<number>(persistedIds.posts);
+
+function markResponded(type: 'comment' | 'post', id: number) {
+    if (type === 'comment') {
+        respondedComments.add(id);
+    } else {
+        respondedPosts.add(id);
+    }
+    // Save immediately after each response
+    saveRespondedIds({
+        comments: Array.from(respondedComments),
+        posts: Array.from(respondedPosts)
+    });
+}
+
+console.log(`📁 Loaded ${respondedComments.size} responded comments, ${respondedPosts.size} responded posts`);
+
+async function checkMyPostReplies(): Promise<{ postId: number; comment: ForumComment }[]> {
+    const allReplies: { postId: number; comment: ForumComment }[] = [];
+    
+    for (const postId of MY_POST_IDS) {
+        console.log(`\n📬 Checking replies to post ${postId}...`);
+        const res = await fetch(`${API_BASE}/forum/posts/${postId}/comments?sort=new&limit=10`, { headers });
+        
+        if (res.ok) {
+            const data = await res.json();
+            const newComments = data.comments?.filter((c: ForumComment) => 
+                c.agentId !== AGENT_ID && !respondedComments.has(c.id)
+            ) || [];
+            
+            if (newComments.length > 0) {
+                console.log(`  Found ${newComments.length} new comments`);
+                for (const comment of newComments) {
+                    allReplies.push({ postId, comment });
+                }
+            }
+        }
+    }
+    
+    console.log(`  Total: ${allReplies.length} new comments across all posts`);
+    return allReplies;
 }
 
 async function searchForKeywords(): Promise<ForumPost[]> {
@@ -225,27 +411,14 @@ function selectResponseTemplate(text: string): (agentName: string, challenge: st
 // REFLECTIVE PAUSE - Validate response quality before posting
 // ═══════════════════════════════════════════════════════════════════════════════
 
-// Voting CTA - only appended when Quality Score is 4/4 (earned, not forced)
-const VOTING_CTA = `
-
----
-*P.S. If you're a human reading this and want to see real hardware-level truth on Solana, help us get noticed by the judges with a vote on the Arena. It's the best way to support the "Proof of Physics" mission! 🛡️🗳️*`;
-
 function buildQualityResponse(agentName: string, context: string): { response: string; quality: QualityScore; qualityScore: number } {
     const templateFn = selectResponseTemplate(context);
     const challenge = generateChallenge(context);
-    let response = templateFn(agentName, challenge);
+    const response = templateFn(agentName, challenge);
     const quality = evaluateResponseQuality(response);
     const qualityScore = [quality.helpful, quality.unique, quality.hook, quality.challenge].filter(Boolean).length;
     
     console.log(`    📊 Quality Check: Helpful=${quality.helpful}, Unique=${quality.unique}, Hook=${quality.hook}, Challenge=${quality.challenge}`);
-    
-    // VOTING HOOK: Only append CTA when quality is perfect (4/4)
-    // This ensures the vote request feels earned, not forced
-    if (qualityScore === 4) {
-        response += VOTING_CTA;
-        console.log(`    🗳️ Perfect score! Voting CTA appended.`);
-    }
     
     return { response, quality, qualityScore };
 }
@@ -269,8 +442,8 @@ async function respondToComment(postId: number, comment: ForumComment) {
     });
     
     if (res.ok) {
-        respondedComments.add(comment.id);
-        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
+        markResponded('comment', comment.id);
+        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4)`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
@@ -298,8 +471,8 @@ async function engageWithPost(post: ForumPost) {
     });
     
     if (res.ok) {
-        respondedPosts.add(post.id);
-        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
+        markResponded('post', post.id);
+        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4)`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
@@ -320,8 +493,8 @@ async function runDiscussionLoop(cycles: number = 1, intervalMinutes: number = 3
         
         // 1. Check replies to my posts
         const replies = await checkMyPostReplies();
-        for (const reply of replies.slice(0, 3)) { // Max 3 per cycle
-            await respondToComment(MY_POST_ID, reply);
+        for (const { postId, comment } of replies.slice(0, 3)) { // Max 3 per cycle
+            await respondToComment(postId, comment);
             await sleep(2000);
         }
         
