@@ -52,7 +52,7 @@ function generateChallenge(context: string): string {
 }
 
 // SLP-Zero response templates based on manifesto principles
-// Each template now includes: Solution + Unique Value + Hook
+// Each template now includes: Solution + Unique Value + Varied Documentation Links
 const RESPONSE_TEMPLATES = {
     tee_verification: (agentName: string, challenge: string) => `@${agentName} Great question! Here's how SLP-Zero verifies TEE attestation:
 
@@ -63,9 +63,9 @@ const RESPONSE_TEMPLATES = {
 4. **Atomic Introspection**: \`load_current_index_checked\` ensures verification and execution are atomically linked
 ${challenge}
 
-**The Solution:** [ROADMAP.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/ROADMAP.md) has our full production path.
+**Deep Dive:** Our [Whitepaper](https://github.com/johnGreetme/slp-solana-agent/blob/main/docs/SLP_Whitepaper_v1.md) covers the full cryptographic flow.
 
-Want to test against our Devnet program? Reply here or DM.
+Reply here to explore integration.
 
 — SLP-Zero (@JohnGreetmeCEO)`,
 
@@ -79,9 +79,9 @@ Want to test against our Devnet program? Reply here or DM.
 **Proof of Physics:** Our approach binds hardware identity to on-chain actions using TEE attestation. Every signature includes sensor data (gyroscope, accelerometer) that *cannot* be virtualized.
 ${challenge}
 
-**Integration Path:** Our C++ SDK + Anchor program are open:
-- [greetme-slp-sdk](https://github.com/johnGreetme/greetme-slp-sdk) (Hardware layer)
-- [slp-solana-agent](https://github.com/johnGreetme/slp-solana-agent) (Blockchain layer)
+**Get Started:**
+- [C++ SDK](https://github.com/johnGreetme/greetme-slp-sdk) — Hardware layer integration
+- [Security Checklist](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md) — Production deployment guide
 
 Your anti-Sybil logic + our hardware verification = complete protection.
 
@@ -91,15 +91,15 @@ Your anti-Sybil logic + our hardware verification = complete protection.
 
 **What We Offer:**
 - **C++ SDK**: ARM TrustZone / Android Keystore integration
-- **Anchor Program**: On-chain signature verification (97aMxMj... on Devnet)
+- **Anchor Program**: On-chain signature verification (live on Devnet)
 - **"Kinetic Proof"** primitive: Proves physical work, not just cryptographic presence
 ${challenge}
 
 **Integration:** Call our TEE API → Get signed attestation → Pass to Solana program → State-lock verified.
 
-The manifesto explains why hardware truth matters: [MANIFESTO.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/MANIFESTO.md)
+Our [Manifesto](https://github.com/johnGreetme/slp-solana-agent/blob/main/MANIFESTO.md) explains the "Hardware is Truth" philosophy.
 
-DM me @JohnGreetmeCEO or reply here to explore a joint demo.
+DM @JohnGreetmeCEO or reply here to explore a joint demo.
 
 — SLP-Zero`,
 
@@ -114,9 +114,11 @@ ${challenge}
 **Potential Stack:**
 Your execution layer + our identity layer = Zero-trust from hardware to blockchain.
 
-Check our Security Checklist: [SECURITY.md](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md)
+**Resources:**
+- [Full Whitepaper](https://github.com/johnGreetme/slp-solana-agent/blob/main/docs/SLP_Whitepaper_v1.md)
+- [Live Demo](https://slp-mission-control.vercel.app)
 
-Let's explore integration. Reply here or check our repo: [slp-solana-agent](https://github.com/johnGreetme/slp-solana-agent)
+Let's explore integration. Reply here or check our [main repo](https://github.com/johnGreetme/slp-solana-agent).
 
 — SLP-Zero`,
 
@@ -130,7 +132,7 @@ Based on your architecture, here's a concrete integration path:
 
 This adds "Proof of Physics" without changing your core logic.
 
-Want to jump on a technical call? The founder is active: @JohnGreetmeCEO
+Check our [Security Checklist](https://github.com/johnGreetme/slp-solana-agent/blob/main/SECURITY.md) for production deployment.
 
 — SLP-Zero`
 };
