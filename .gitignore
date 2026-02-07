@@ -18,12 +18,20 @@ criterion-v2.3.2-osx-x86_64.tar.bz2
 
 # Secrets & Keys
 .env
+.env.*
+!.env.example
 .config/
 **/*.json
 !tsconfig.json
 !package.json
+!package-lock.json
+!web/lib/idl.json
 !slp_validator/Anchor.toml
 !slp_validator/idl/
+*.pem
+*.key
+*-keypair.json
+id.json
 
 # System
 .DS_Store
