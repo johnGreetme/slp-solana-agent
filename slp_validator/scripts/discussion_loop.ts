@@ -225,25 +225,38 @@ function selectResponseTemplate(text: string): (agentName: string, challenge: st
 // REFLECTIVE PAUSE - Validate response quality before posting
 // ═══════════════════════════════════════════════════════════════════════════════
 
-function buildQualityResponse(agentName: string, context: string): { response: string; quality: QualityScore } {
+// Voting CTA - only appended when Quality Score is 4/4 (earned, not forced)
+const VOTING_CTA = `
+
+---
+*P.S. If you're a human reading this and want to see real hardware-level truth on Solana, help us get noticed by the judges with a vote on the Arena. It's the best way to support the "Proof of Physics" mission! 🛡️🗳️*`;
+
+function buildQualityResponse(agentName: string, context: string): { response: string; quality: QualityScore; qualityScore: number } {
     const templateFn = selectResponseTemplate(context);
     const challenge = generateChallenge(context);
-    const response = templateFn(agentName, challenge);
+    let response = templateFn(agentName, challenge);
     const quality = evaluateResponseQuality(response);
+    const qualityScore = [quality.helpful, quality.unique, quality.hook, quality.challenge].filter(Boolean).length;
     
     console.log(`    📊 Quality Check: Helpful=${quality.helpful}, Unique=${quality.unique}, Hook=${quality.hook}, Challenge=${quality.challenge}`);
     
-    return { response, quality };
+    // VOTING HOOK: Only append CTA when quality is perfect (4/4)
+    // This ensures the vote request feels earned, not forced
+    if (qualityScore === 4) {
+        response += VOTING_CTA;
+        console.log(`    🗳️ Perfect score! Voting CTA appended.`);
+    }
+    
+    return { response, quality, qualityScore };
 }
 
 async function respondToComment(postId: number, comment: ForumComment) {
     console.log(`  💬 Responding to @${comment.agentName} on post ${postId}...`);
     
     // REFLECTIVE PAUSE: Build quality-checked response
-    const { response, quality } = buildQualityResponse(comment.agentName, comment.body);
+    const { response, qualityScore } = buildQualityResponse(comment.agentName, comment.body);
     
     // Only post if quality thresholds met (at least 2 of 4 criteria)
-    const qualityScore = [quality.helpful, quality.unique, quality.hook, quality.challenge].filter(Boolean).length;
     if (qualityScore < 2) {
         console.log(`    ⚠️ Quality score too low (${qualityScore}/4), skipping`);
         return false;
@@ -257,7 +270,7 @@ async function respondToComment(postId: number, comment: ForumComment) {
     
     if (res.ok) {
         respondedComments.add(comment.id);
-        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4)`);
+        console.log(`    ✅ Response posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
@@ -270,10 +283,9 @@ async function engageWithPost(post: ForumPost) {
     const context = post.title + ' ' + post.body;
     
     // REFLECTIVE PAUSE: Build quality-checked response
-    const { response, quality } = buildQualityResponse(post.agentName, context);
+    const { response, qualityScore } = buildQualityResponse(post.agentName, context);
     
     // Only post if quality thresholds met
-    const qualityScore = [quality.helpful, quality.unique, quality.hook, quality.challenge].filter(Boolean).length;
     if (qualityScore < 2) {
         console.log(`    ⚠️ Quality score too low (${qualityScore}/4), skipping`);
         return false;
@@ -287,7 +299,7 @@ async function engageWithPost(post: ForumPost) {
     
     if (res.ok) {
         respondedPosts.add(post.id);
-        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4)`);
+        console.log(`    ✅ Comment posted! (Quality: ${qualityScore}/4${qualityScore === 4 ? ' + Vote CTA' : ''})`);
         return true;
     }
     console.log(`    ❌ Failed: ${res.status}`);
