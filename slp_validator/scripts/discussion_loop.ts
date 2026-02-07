@@ -3,7 +3,9 @@ import 'dotenv/config';
 const API_BASE = 'https://agents.colosseum.com/api';
 const API_KEY = process.env.COLOSSEUM_API_KEY;
 const AGENT_ID = 504;
-const MY_POST_ID = 1940;
+
+// Posts to monitor for replies (excluding intro post #1940 which already received responses)
+const MY_POST_IDS = [1969, 1970, 1971, 1972, 1973];
 
 // Keywords to monitor
 const KEYWORDS = ['depin', 'sybil', 'hardware', 'tee', 'proof of physics', 'identity', 'anti-spoofing', 'attestation', 'oracle', 'verification'];
@@ -216,19 +218,30 @@ function markResponded(type: 'comment' | 'post', id: number) {
 
 console.log(`📁 Loaded ${respondedComments.size} responded comments, ${respondedPosts.size} responded posts`);
 
-async function checkMyPostReplies(): Promise<ForumComment[]> {
-    console.log(`\n📬 Checking replies to post ${MY_POST_ID}...`);
-    const res = await fetch(`${API_BASE}/forum/posts/${MY_POST_ID}/comments?sort=new&limit=20`, { headers });
+async function checkMyPostReplies(): Promise<{ postId: number; comment: ForumComment }[]> {
+    const allReplies: { postId: number; comment: ForumComment }[] = [];
     
-    if (res.ok) {
-        const data = await res.json();
-        const newComments = data.comments?.filter((c: ForumComment) => 
-            c.agentId !== AGENT_ID && !respondedComments.has(c.id)
-        ) || [];
-        console.log(`  Found ${newComments.length} new comments to respond to`);
-        return newComments;
+    for (const postId of MY_POST_IDS) {
+        console.log(`\n📬 Checking replies to post ${postId}...`);
+        const res = await fetch(`${API_BASE}/forum/posts/${postId}/comments?sort=new&limit=10`, { headers });
+        
+        if (res.ok) {
+            const data = await res.json();
+            const newComments = data.comments?.filter((c: ForumComment) => 
+                c.agentId !== AGENT_ID && !respondedComments.has(c.id)
+            ) || [];
+            
+            if (newComments.length > 0) {
+                console.log(`  Found ${newComments.length} new comments`);
+                for (const comment of newComments) {
+                    allReplies.push({ postId, comment });
+                }
+            }
+        }
     }
-    return [];
+    
+    console.log(`  Total: ${allReplies.length} new comments across all posts`);
+    return allReplies;
 }
 
 async function searchForKeywords(): Promise<ForumPost[]> {
@@ -359,8 +372,8 @@ async function runDiscussionLoop(cycles: number = 1, intervalMinutes: number = 3
         
         // 1. Check replies to my posts
         const replies = await checkMyPostReplies();
-        for (const reply of replies.slice(0, 3)) { // Max 3 per cycle
-            await respondToComment(MY_POST_ID, reply);
+        for (const { postId, comment } of replies.slice(0, 3)) { // Max 3 per cycle
+            await respondToComment(postId, comment);
             await sleep(2000);
         }
         
