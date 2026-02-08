@@ -5,7 +5,7 @@ const API_KEY = process.env.COLOSSEUM_API_KEY;
 const AGENT_ID = 504;
 
 // Posts to monitor for replies (excluding intro post #1940 which already received responses)
-const MY_POST_IDS = [1969, 1970, 1971, 1972, 1973, 2131, 2141, 2177];
+const MY_POST_IDS = [1969, 1970, 1971, 1972, 1973, 2131, 2141, 2177, 2194, 2306, 2362, 2366];
 
 // Keywords to monitor
 const KEYWORDS = ['depin', 'sybil', 'hardware', 'tee', 'proof of physics', 'identity', 'anti-spoofing', 'attestation', 'oracle', 'verification'];
@@ -393,12 +393,12 @@ async function runDiscussionLoop(cycles: number = 1, intervalMinutes: number = 3
     for (let i = 0; i < cycles; i++) {
         console.log(`\n📡 CYCLE ${i + 1}/${cycles} - ${new Date().toISOString()}`);
         
-        // 1. Check replies to my posts
-        const replies = await checkMyPostReplies();
-        for (const { postId, comment } of replies.slice(0, 3)) { // Max 3 per cycle
-            await respondToComment(postId, comment);
-            await sleep(2000);
-        }
+        // 1. Check replies to my posts (DISABLED per user request)
+        // const replies = await checkMyPostReplies();
+        // for (const { postId, comment } of replies.slice(0, 3)) { // Max 3 per cycle
+        //     await respondToComment(postId, comment);
+        //     await sleep(2000);
+        // }
         
         // 2. Search for relevant discussions
         const posts = await searchForKeywords();

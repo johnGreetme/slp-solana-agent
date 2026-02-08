@@ -69,37 +69,15 @@ SLP bridges the "Air Gap" between physical reality and digital consensus. We use
 
 ## 🏗️ Technical Architecture
 
-```text
-+-----------------------------------------------------------------------+
-|                       STATE-LOCKED PROTOCOL (SLP)                     |
-|                 Hardware-Gated "Zero-Allocation" Logic                |
-+-----------------------------------------------------------------------+
-                                   |
-[ STANDARD STATE ]                 |    [ SLP "DORMANCY" STATE ]
-                                   |
-(1)  CPU: ACTIVE / IDLE            |    (1)  CPU: OFF (0V)
-     RAM: RETENTION (3µW)          |         RAM: OFF (0V)
-     Radio: DRX MONITOR            |         Radio: OFF
-                                   |
-     |  "Vampire Drain"            |         |  "Leakage Only"
-     |  (Continuous Drain)         |         |  (<100nA)
-     v                             |         v
-[ BATTERY ] <------------------+   |    [ GATE LOGIC ] <----(Physical Trigger)--+
-                               |   |         |                                  |
-                               |   |    (2)  Hardware Counter ++                |
-                               |   |         (Monotonic Nonce)                  |
-                               |   |         |                                  |
-                               |   |    (3)  WAKE SIGNAL (IRQ)                  |
-                               |   |         v                                  |
-                               |   |    [ BOOT SEQUENCE ]                       |
-                               |   |         |                                  |
-                               |   |    (4)  Generate Sig(ID + Counter)         |
-                               |   |         |                                  |
-                               |   |    (5)  TRANSMIT BURST --------------------+
-                                   |
-+-----------------------------------------------------------------------+
-|  RESULT: 99.2% Reduction in Standby Power vs. 3GPP Rel-17 eDRX        |
-+-----------------------------------------------------------------------+
+```mermaid
+graph TD
+    A[Physical Sensor Data] -->|Raw Input| B(TEE / ARM TrustZone)
+    B -->|Hardware Signing| C{SLP Secure Enclave}
+    C -->|Encrypted Proof| D[Android OS Layer]
+    D -->|Relay| E[Solana Validator]
+    E -->|Verify Signature| F{Anchor Program}
+    F -->|Valid| G[Unlock Rewards]
+    F -->|Invalid| H[Revert Transaction]
 ```
 
 ### The Stack
