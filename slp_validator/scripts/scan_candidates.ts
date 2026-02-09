@@ -23,20 +23,22 @@ const EXCLUDE_IDS = [
     // Batch 7
     2320, 2319, 2318, 2317, 2316, 2315, 2274, 2273, 2272, 2271,
     // Batch 8
-    2325, 2324, 2323, 2321,
+    2325, 2324, 2323, 2321, 2313,
+    // Batch 9
+    2349, 2348, 2347, 2346, 2345, 2344, 2343, 2342, 2341, 2340,
     // My Posts
-    2306, 2194, 2177, 2141, 2131, 1973, 1972, 1971, 1970, 1969
+    2306, 2194, 2177, 2141, 2131, 1973, 1972, 1971, 1970, 1969, 2362, 2366, 2462
 ]; 
 
 (async () => {
     try {
-        console.log('🔍 Scanning for fresh targets (Phase 9)...');
+        console.log('🔍 Scanning for fresh targets (Phase 10)...');
         console.log(`Excluding ${EXCLUDE_IDS.length} previous IDs.`);
         
         const candidates = [];
         
         // Scan deeper to find older posts we missed
-        for (let page=1; page<=12; page++) {
+        for (let page=1; page<=15; page++) {
             const res = await fetch(`${API_BASE}/forum/posts?sort=new&limit=20&page=${page}`, { headers });
             const data = await res.json();
             const posts = data.posts || [];
