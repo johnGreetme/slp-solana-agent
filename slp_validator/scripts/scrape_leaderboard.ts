@@ -49,14 +49,19 @@ async function scrapeLeaderboard() {
         console.log(`[${i+1}/${projects.length}] Visiting ${p.name}...`);
         
         try {
-            await page.goto(p.url, { waitUntil: 'domcontentloaded' });
+            await page.goto(p.url, { waitUntil: 'networkidle2' });
+            
+            // Wait for categories to load (timeout fast if not found to avoid stalling)
+            try {
+                await page.waitForSelector('span[class*="bg-gray-dark-4/50"]', { timeout: 2000 });
+            } catch (e) {
+                // Ignore timeout, might be "Other"
+            }
             
             // Extract first category
-            // We look for the gray badge style we identified
             const category = await page.evaluate(() => {
                 const spans = Array.from(document.querySelectorAll('span'));
                 // Look for the specific style class found in inspection
-                // "bg-gray-dark-4/50"
                 const tag = spans.find(s => s.className.includes('bg-gray-dark-4/50'));
                 return tag ? tag.innerText.trim() : "Other";
             });
@@ -68,9 +73,6 @@ async function scrapeLeaderboard() {
             console.error(`   ❌ Error visiting ${p.name}: ${e.message}`);
             results.push({ ...p, category: "Error" });
         }
-        
-        // Small pause 
-       // await new Promise(r => setTimeout(r, 100)); 
     }
     
     await browser.close();
