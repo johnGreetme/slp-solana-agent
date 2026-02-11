@@ -181,6 +181,29 @@ This entire protocol—from Patent to Production Code—was architected in <24 h
 
 _"We didn't just write code; we deployed an autonomous immune system for Solana."_
 
+---
+
+## 🛡 Intellectual Property & Standards
+
+The State-Locked Protocol (SLP)™ is a proprietary methodology currently **Patent Pending (GB2602651.8)**.
+
+### Methodology Scope
+
+Our patent claims cover the fundamental method of State-Locked Resource Allocation, including:
+
+*   **The Causal Trigger:** Maintaining a device in a dormant state and waking it via a hardware sensor transition.
+*   **Proof of Physics:** The use of a Hardware Monotonic Counter to generate cryptographic tokens that prove "wake-up freshness" and physical origin.
+*   **Zero-Allocation Logic:** A server-side protocol that denies memory or actuation resources until a hardware-signed token is verified.
+
+### Open Source Strategy
+
+This repository serves as the Standard Specification and reference implementation for SLP.
+
+*   **Codebase:** Licensed under MIT License, allowing for free use, modification, and distribution of the software implementation.
+*   **Methodology:** The underlying method of binding hardware triggers to server-side state remains the protected intellectual property of Greetme Technologies.
+
+---
+
 ## 📚 Documentation
 
 - [**White Paper (19 Pages)**](docs/SLP_Whitepaper_v1.md): Full cryptographic specification and game-theoretic analysis.
