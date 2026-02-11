@@ -33,4 +33,4 @@ async function fetchPost(postId: number) {
     }
 }
 
-fetchPost(4462);
+fetchPost(4778);
