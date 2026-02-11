@@ -30,6 +30,32 @@ We don't just write standards; we deploy networks.
 
 ---
 
+## 🧬 Vitality Stream & Analytics
+
+The Kytin Mission Control provides a real-time, medical-grade EKG stream of your hardware's health.
+
+![Kytin Mission Control](./docs/assets/mission-control.jpg)
+
+### 🛡 Verified Titan Burn
+Every heartbeat is a cryptographic "Proof of Physics" event, burning exactly 10.0 RESIN as an anti-spam tax.
+
+![Titan Burn Receipt](./docs/assets/burn-instruction.jpg)
+
+### 🌍 Global Fleet & Disaster Recovery
+
+<table>
+  <tr>
+    <td><b>Global Explorer</b></td>
+    <td><b>Lazarus Recovery</b></td>
+  </tr>
+  <tr>
+    <td><img src="./docs/assets/global-explorer.jpg" width="400"></td>
+    <td><img src="./docs/assets/lazarus-protocol.jpg" width="400"></td>
+  </tr>
+</table>
+
+---
+
 ## 👁️ The Vision
 
 **We are building the Silicon Root of Trust for Solana.** In a world where software can lie, hardware tells the truth. SLP-Zero turns physical work into cryptographic certainty—ending the Sybil era and unlocking the $3.5T DePIN economy.
