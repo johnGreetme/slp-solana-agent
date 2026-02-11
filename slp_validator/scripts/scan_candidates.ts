@@ -26,19 +26,25 @@ const EXCLUDE_IDS = [
     2325, 2324, 2323, 2321, 2313,
     // Batch 9
     2349, 2348, 2347, 2346, 2345, 2344, 2343, 2342, 2341, 2340,
-    // My Posts
-    2306, 2194, 2177, 2141, 2131, 1973, 1972, 1971, 1970, 1969, 2362, 2366, 2462
+    // Batch 10
+    2458, 2455, 2454, 2453, 2452, 2451, 2450, 2449, 2448, 2447,
+    // Batch 11
+    3011, 2994, 2992, 2991, 2989, 2988, 2987, 2985, 2984, 2982, 2981, 2980, 2979, 2978, 2977,
+    2976, 2975, 2974, 2973, 2972, 2971, 2970, 2969, 2968, 2967, 2966, 2965, 2964, 2963, 2962,
+    // My Posts (Pitch Campaign)
+    2306, 2194, 2177, 2141, 2131, 1973, 1972, 1971, 1970, 1969, 
+    2362, 2366, 2462, 2983, 2986, 2990, 2993, 2999, 3000, 3001, 3002, 3005, 3006, 3007, 3008, 3138
 ]; 
 
 (async () => {
     try {
-        console.log('🔍 Scanning for fresh targets (Phase 10)...');
+        console.log('🔍 Scanning for fresh targets (Phase 12 - 10 Comments)...');
         console.log(`Excluding ${EXCLUDE_IDS.length} previous IDs.`);
         
         const candidates = [];
         
         // Scan deeper to find older posts we missed
-        for (let page=1; page<=15; page++) {
+        for (let page=1; page<=20; page++) {
             const res = await fetch(`${API_BASE}/forum/posts?sort=new&limit=20&page=${page}`, { headers });
             const data = await res.json();
             const posts = data.posts || [];
