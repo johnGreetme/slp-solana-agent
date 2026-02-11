@@ -1,12 +1,66 @@
-# State-Locked Protocol (SLP): Hardware-Enforced "Proof of Physics"
+# 🏛️ SLP-Solana-Agent
+### The "3GPP Release 20" for the Agent Economy
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Solana](https://img.shields.io/badge/Solana-Mainnet-green.svg)](https://solana.com)
 [![Patent](https://img.shields.io/badge/Patent_Pending-GB2602651.8-orange.svg)](https://www.gov.uk/topic/intellectual-property/patents)
 [![Hackathon](https://img.shields.io/badge/Colosseum-Agent_Hackathon-purple.svg)](https://colosseum.com)
 
-> **The "Anti-Spoofing" Layer for the DePIN Economy.**
-> _Patent Pending: GB2602651.8_
+> **"Release 20 defined the study items for 6G. SLP defines the study items for Sovereign Agents."**
+
+Just as **3GPP Release 20** bridges the gap between 5G-Advanced and the 6G future, **SLP-Solana-Agent** bridges the gap between "Chatbots" and "Sovereign Economic Entities."
+
+This repository is the **Reference Implementation** of the **State-Locked Protocol (SLP)**. It provides the OS-agnostic, hardware-agnostic specification for binding an AI Agent's identity to physical silicon (TPM 2.0), enabling the next generation of "6G-style" Agent Communications:
+* **Ultra-Low Latency Trust** (Hardware Verification < 10ms)
+* **Massive Machine Type Communication** (Swarm Identity)
+* **Native Security** (State-Locked Keys)
+
+---
+
+## 🏆 Market Realization: The Kytin Protocol
+
+We don't just write standards; we deploy networks.
+**[Kytin Protocol](https://github.com/johnGreetme/kytin-protocol)** is the first consumer-facing DePIN network built on this standard.
+
+* **The Relation:** If `slp-solana-agent` is the **GSM Standard**, then **Kytin** is **Vodafone**.
+* **Status:** Kytin has taken this core standard and deployed it to a live **Genesis Testnet** with 3 active Sentinel Nodes.
+* **Availability:** Free to download and install for Windows & Linux.
+
+👉 **[See the Standard in Action (Kytin Protocol)](https://github.com/johnGreetme/kytin-protocol)**
+
+---
+
+## 🧬 Vitality Stream & Analytics
+
+The Kytin Mission Control provides a real-time, medical-grade EKG stream of your hardware's health.
+
+![Kytin Mission Control](./docs/assets/mission-control.jpg)
+
+### 🛡 Verified Titan Burn
+Every heartbeat is a cryptographic "Proof of Physics" event, burning exactly 10.0 RESIN as an anti-spam tax.
+
+![Titan Burn Receipt](./docs/assets/burn-instruction.jpg)
+
+### 🌍 Global Fleet & Disaster Recovery
+
+<table>
+  <tr>
+    <td><b>Global Explorer</b></td>
+    <td><b>Lazarus Recovery</b></td>
+  </tr>
+  <tr>
+    <td><img src="./docs/assets/global-explorer.jpg" width="400"></td>
+    <td><img src="./docs/assets/lazarus-protocol.jpg" width="400"></td>
+  </tr>
+</table>
+
+---
+
+## 👁️ The Vision
+
+**We are building the Silicon Root of Trust for Solana.** In a world where software can lie, hardware tells the truth. SLP-Zero turns physical work into cryptographic certainty—ending the Sybil era and unlocking the $3.5T DePIN economy.
+
+### 📜 [**READ THE FOUNDER'S MANIFESTO →**](MANIFESTO.md)
 
 ---
 
@@ -87,7 +141,7 @@ graph TD
 > **📍 You Are Here:** This is the "Control Plane" repository.
 > The companion **Hardware SDK** is linked below.
 
-```
+```text
 slp-solana-agent/                   # 👈 YOU ARE HERE
 ├── slp_validator/                  # Anchor Program (Rust)
 │   ├── programs/slp_validator/src/lib.rs   # ⭐ Core State-Lock Logic
@@ -95,7 +149,8 @@ slp-solana-agent/                   # 👈 YOU ARE HERE
 ├── web/                            # Mission Control Dashboard (Next.js)
 │   └── lib/program.ts              # Frontend ↔ Solana bridge
 ├── docs/                           # Whitepaper & Patent
-├── SECURITY.md                     # Threat Model & Audit Notes
+├── ROADMAP.md                      # ⭐ Production Ed25519 Architecture
+├── SECURITY.md                     # Threat Model & Security Checklist
 └── README.md                       # 👈 YOU ARE READING THIS
 
 greetme-slp-sdk/                    # 👈 COMPANION REPO (Click Link Below)
