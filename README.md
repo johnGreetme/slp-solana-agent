@@ -126,7 +126,7 @@ slp-solana-agent/                   # 👈 YOU ARE HERE
 │   └── lib/program.ts              # Frontend ↔ Solana bridge
 ├── docs/                           # Whitepaper & Patent
 ├── ROADMAP.md                      # ⭐ Production Ed25519 Architecture
-├── SECURITY.md                     # Threat Model & Security Checklist
+├── SECURITY.md                     # Threat Model & Audit Notes
 └── README.md                       # 👈 YOU ARE READING THIS
 
 greetme-slp-sdk/                    # 👈 COMPANION REPO (Click Link Below)
