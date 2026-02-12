@@ -14,7 +14,7 @@ async function findSlpZero() {
     if (res.ok) {
         const data = await res.json();
         const projects = data.projects || [];
-        const slpZero = projects.find(p => p.name.includes('SLP-ZERO'));
+        const slpZero = projects.find(p => p.name.toUpperCase().includes('SLP-ZERO'));
         
         if (slpZero) {
             console.log('✅ Found SLP-ZERO:', JSON.stringify(slpZero, null, 2));

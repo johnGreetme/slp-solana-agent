@@ -1,4 +1,4 @@
-# 🏛️ SLP-Solana-Agent
+# 🏛️ Kytin-Protocol
 ### The "3GPP Release 20" for the Agent Economy
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
