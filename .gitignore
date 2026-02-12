@@ -1,3 +1,13 @@
+# Emergency Security & Hygiene Blocks
+deploy-wallet.json
+new-deploy-wallet.json
+.env
+*.key
+slp_validator/target/
+slp_validator/node_modules/
+slp_validator/temp_solana/
+*.tar.bz2
+
 # Node
 node_modules/
 dist/

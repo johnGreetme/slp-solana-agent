@@ -43,8 +43,8 @@ describe("slp_validator simulation", () => {
         const drone = drones[0];
         const counter = new anchor.BN(100);
         const triggerType = 1; // GPS
-        // string signature (token)
-        const signature = "token_gps_100";
+        // string signature (64-byte mock)
+        const signature = "a".repeat(64); // 64-character mock hex/string signature
 
         console.log(`\n[Test A] ${drone.hardwareId} sending Trigger: GPS (1)`);
 
@@ -64,7 +64,7 @@ describe("slp_validator simulation", () => {
         const drone = drones[1];
         const counter = new anchor.BN(200);
         const triggerType = 3; // Vibration
-        const signature = "token_vib_200";
+        const signature = "b".repeat(64);
 
         console.log(`\n[Test B] ${drone.hardwareId} sending Trigger: Mutation (3)`);
 
@@ -86,7 +86,7 @@ describe("slp_validator simulation", () => {
         // Let's try sending 99 (stale) or 100 (replay).
         const oldCounter = new anchor.BN(100); 
         const triggerType = 2; // NFC
-        const signature = "token_replay_attack";
+        const signature = "c".repeat(64);
 
         console.log(`\n[Test C] ${drone.hardwareId} sending OLD Counter: 100 (Should Fail)`);
 

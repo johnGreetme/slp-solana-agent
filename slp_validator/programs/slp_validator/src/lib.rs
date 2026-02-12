@@ -31,12 +31,12 @@ pub mod slp_validator {
         }
 
         // Logic 2: Verify Signature (The Fix)
-        // NOTE: For Hackathon MVP, we verify signature presence.
-        // Production would use Ed25519 program verify instruction.
-        // TODO: Full Ed25519 verification pending Mainnet deployment.
-        require!(signature.len() > 0, ErrorCode::InvalidSignature);
+        // ARCHITECTURAL NOTE:
+        // Native Ed25519 verification is deferred to V2 via Instruction Introspection.
+        // Current check enforces structure only (64-byte Ed25519 signature format), not cryptographic validity.
+        require!(signature.len() == 64, ErrorCode::InvalidSignatureFormat);
 
-        msg!("Verifying TEE Signature: {}", signature);
+        msg!("Ingesting TEE Signature Format: {}...", &signature[..10]);
 
         // Logic 3: Update state
         device_state.last_counter = monotonic_counter;
@@ -127,6 +127,6 @@ pub struct ProofVerified {
 pub enum ErrorCode {
     #[msg("The proof counter is stale (less than or equal to stored counter).")]
     StaleProof,
-    #[msg("Hardware signature is missing or invalid.")]
-    InvalidSignature,
+    #[msg("Hardware signature format is invalid (must be 64 bytes).")]
+    InvalidSignatureFormat,
 }
