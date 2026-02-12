@@ -98,7 +98,7 @@ async function createPost() {
             body: JSON.stringify({ 
                 title: TITLE,
                 body: BODY,
-                tags: ['infra', 'security', 'solana', 'agent-rights']
+                tags: ['infra', 'security', 'ai', 'identity']
             })
         });
 
